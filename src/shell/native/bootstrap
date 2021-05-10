@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd ${LAMBDA_TASK_ROOT:-.}
+
+./spring-native-function-aws-dynamodb-kotlin \
+  -Djava.library.path=${LAMBDA_TASK_ROOT}/ssl \
+  -Djavax.net.ssl.trustStore=${LAMBDA_TASK_ROOT}/ssl/cacerts \
+  -Djavax.net.ssl.trustAnchors=${LAMBDA_TASK_ROOT}/ssl/cacerts \
+  -Djavax.net.ssl.trustStorePassword=changeit \
+  -Dlogging.level.org.springframework=INFO \
+  -Dspring.main.web-application-type=none

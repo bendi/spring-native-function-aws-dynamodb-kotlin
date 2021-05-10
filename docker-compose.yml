@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+  native-builder:
+    image: softinstigate/graalvm-maven
+    container_name: graalvm-builder
+    build:
+      context: .
+    volumes:
+      - ".:/opt/app"
+      - "$HOME/.m2:/root/.m2"
+    profiles: ["native-image"]
+    command: "clean package -Pnative-image"
+  native-runner:
+    container_name: function-sample-aws-native
+    depends_on:
+      native-builder:
+        condition: service_completed_successfully
+    links:
+      - native-builder
+    build:
+      context: .
+      dockerfile: docker/native/Dockerfile
+    ports:
+     - "9000:8080"
+    profiles:
+     - "native-image"
+  java-runner:
+    container_name: function-sample-aws
+    build:
+      context: .
+      dockerfile: docker/java/Dockerfile
+    ports:
+      - "9000:8080"
+    profiles:
+      - "java-runner"
+  dynamo:
+    command: "-jar DynamoDBLocal.jar -sharedDb -optimizeDbBeforeStartup -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+
