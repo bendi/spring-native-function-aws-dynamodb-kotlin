@@ -17,8 +17,8 @@ class ProductInfoRepository(dynamoDbEnhancedClient: DynamoDbEnhancedClient) {
         private fun tableSchema(): TableSchema<ProductInfo> {
             return StaticTableSchema.builder(ProductInfo::class.java)
                     .newItemSupplier({ ProductInfo() })
-                    .addAttribute<kotlin.String?>(
-                            kotlin.String::class.java,
+                    .addAttribute(
+                            String::class.java,
                             {
                                 it.name("id")
                                         .getter(ProductInfo::id.getter)
@@ -26,16 +26,16 @@ class ProductInfoRepository(dynamoDbEnhancedClient: DynamoDbEnhancedClient) {
                                         .tags(StaticAttributeTags.primaryPartitionKey())
                             }
                     )
-                    .addAttribute<kotlin.String?>(
-                            kotlin.String::class.java,
+                    .addAttribute(
+                            String::class.java,
                             {
                                 it.name("msrp")
                                         .getter(ProductInfo::msrp.getter)
                                         .setter(ProductInfo::msrp.setter)
                             }
                     )
-                    .addAttribute<kotlin.String?>(
-                            kotlin.String::class.java,
+                    .addAttribute(
+                            String::class.java,
                             {
                                 it.name("cost")
                                         .getter(ProductInfo::cost.getter)

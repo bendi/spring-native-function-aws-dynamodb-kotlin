@@ -14,29 +14,27 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.net.URI
 
 @Configuration
-class DynamoDBConfig(private val dynamoDbConfigProps: DynamoDbConfigProps) {
+@Profile("local")
+class DynamoDBConfigLocal(private val dynamoDbConfigProps: DynamoDbConfigProps) {
 
-    @Profile("local")
-    internal inner class Local {
-        fun awsCredentials() = AwsBasicCredentials.create(dynamoDbConfigProps.accesskey, dynamoDbConfigProps.secretkey)
+    fun awsCredentials() = AwsBasicCredentials.create(dynamoDbConfigProps.accesskey, dynamoDbConfigProps.secretkey)
 
-        fun dynamoDbClient(awsCredentials: AwsCredentials) = DynamoDbClient.builder()
-                .credentialsProvider(AwsCredentialsProvider { awsCredentials })
-                .endpointOverride(dynamoDbConfigProps.endpoint)
-                .region(dynamoDbConfigProps.region).build()
+    fun dynamoDbClient(awsCredentials: AwsCredentials) = DynamoDbClient.builder()
+            .credentialsProvider({ awsCredentials })
+            .endpointOverride(dynamoDbConfigProps.endpoint)
+            .region(dynamoDbConfigProps.region).build()
 
-        @Bean
-        fun dynamoDbEnhancedClient() = DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient(awsCredentials())).build()
-    }
+    @Bean
+    fun dynamoDbEnhancedClient() = DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient(awsCredentials())).build()
+}
 
-    @Profile("!local")
-    internal inner class Aws {
-        fun dynamoDbClient() = DynamoDbClient.builder().region(dynamoDbConfigProps.region).build()
+@Configuration
+@Profile("!local")
+class DynamoDBConfigRemote(private val dynamoDbConfigProps: DynamoDbConfigProps) {
+    fun dynamoDbClient() = DynamoDbClient.builder().region(dynamoDbConfigProps.region).build()
 
-        @Bean
-        fun dynamoDbEnhancedClient() = DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient()).build()
-    }
-
+    @Bean
+    fun dynamoDbEnhancedClient() = DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient()).build()
 }
 
 @ConfigurationProperties(prefix = "amazon.dynamodb")
