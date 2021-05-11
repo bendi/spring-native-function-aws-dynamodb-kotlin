@@ -21,8 +21,8 @@ class ProductInfoRepository(dynamoDbEnhancedClient: DynamoDbEnhancedClient) {
                             String::class.java,
                             {
                                 it.name("id")
-                                        .getter(ProductInfo::id.getter)
-                                        .setter(ProductInfo::id.setter)
+                                        .getter(ProductInfo::id::get)
+                                        .setter(ProductInfo::id::set)
                                         .tags(StaticAttributeTags.primaryPartitionKey())
                             }
                     )
@@ -30,16 +30,16 @@ class ProductInfoRepository(dynamoDbEnhancedClient: DynamoDbEnhancedClient) {
                             String::class.java,
                             {
                                 it.name("msrp")
-                                        .getter(ProductInfo::msrp.getter)
-                                        .setter(ProductInfo::msrp.setter)
+                                        .getter(ProductInfo::msrp::get)
+                                        .setter(ProductInfo::msrp::set)
                             }
                     )
                     .addAttribute(
                             String::class.java,
                             {
                                 it.name("cost")
-                                        .getter(ProductInfo::cost.getter)
-                                        .setter(ProductInfo::cost.setter)
+                                        .getter(ProductInfo::cost::get)
+                                        .setter(ProductInfo::cost::set)
                             }
                     )
                     .build()

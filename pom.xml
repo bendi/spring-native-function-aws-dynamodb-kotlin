@@ -23,6 +23,7 @@
     <native.build.args>
       --enable-http
       --enable-https
+      -H:ReflectionConfigurationFiles=../reflect-config.json
     </native.build.args>
     <native.image-name>spring-native-function-aws-dynamodb-kotlin</native.image-name>
 
@@ -35,7 +36,7 @@
     <java.version>1.8</java.version>
     <aws-lambda-events.version>2.0.2</aws-lambda-events.version>
     <spring-cloud-function.version>3.1.3-SNAPSHOT</spring-cloud-function.version>
-    <software.amazon.awssdk.version>2.16.52</software.amazon.awssdk.version>
+    <software.amazon.awssdk.version>2.16.60</software.amazon.awssdk.version>
     <kotlin.version>1.5.0</kotlin.version>
   </properties>
 
@@ -58,7 +59,13 @@
       <artifactId>spring-cloud-starter-function-web</artifactId>
     </dependency>
 
-		<!-- AWS related stuff -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api-kotlin</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <!-- AWS related stuff -->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-function-adapter-aws</artifactId>
@@ -305,10 +312,6 @@
             <groupId>org.graalvm.nativeimage</groupId>
             <artifactId>native-image-maven-plugin</artifactId>
           </plugin>
-					<plugin>
-						<groupId>org.graalvm.nativeimage</groupId>
-						<artifactId>native-image-maven-plugin</artifactId>
-					</plugin>
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<executions>

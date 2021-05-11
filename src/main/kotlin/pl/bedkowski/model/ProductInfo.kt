@@ -5,32 +5,13 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
 
 @DynamoDbBean
-class ProductInfo {
+data class ProductInfo(
     @get:DynamoDbPartitionKey
-    var id: String?
-        get() = id
-        set(id) {
-            this.id = id
-        }
+    var id: String? = null,
 
     @get:DynamoDbAttribute("msrp")
-    var msrp: String?
-        get() = msrp
-        set(msrp) {
-            this.msrp = msrp
-        }
+    var msrp: String? = null,
 
     @get:DynamoDbAttribute("cost")
-    var cost: String?
-        get() = cost
-        set(cost) {
-            this.cost = cost
-        }
-
-    constructor(expectedCost: String?, expectedPrice: String?) {
-        this.cost = expectedCost
-        this.msrp = expectedPrice
-    }
-
-    constructor() {}
-}
+    var cost: String? = null,
+)
